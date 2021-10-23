@@ -102,7 +102,7 @@ const SignUp = () => {
             </Button>
             <Grid container>
               <Grid item>
-                <Link href="#" variant="body2">
+                <Link href="/" variant="body2">
                   {'Have an account? Sign In'}
                 </Link>
               </Grid>
