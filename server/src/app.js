@@ -1,14 +1,19 @@
-import express from 'express';
-import morgan from 'morgan';
-import helmet from 'helmet';
-import cors from 'cors';
-import mongoose from 'mongoose';
-import config from './config/config.js';
-import api from './routes/index.js';
+const express = require('express');
+const morgan = require('morgan');
+const helmet = require('helmet');
+const cors = require('cors');
 
-export const app = express();
-const { db } = config;
+const mongoose = require('mongoose');
+const { db } = require('./config/config');
+const api = require('./routes');
+const { isAuthenticated } = require('./middlewares');
+const app = express();
+const User = require('./models/User');
+
+// TODO: adding whitelist
 app.use(cors());
+require('./services/passport');
+
 app.use(morgan('dev'));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
@@ -16,17 +21,17 @@ app.use(helmet());
 
 mongoose
   .connect(db.mongoURI, {
-    useNewUrlParser: true,
     useUnifiedTopology: true,
+    useNewUrlParser: true,
   })
-  .then(() => console.log('Mongo DB Coected'))
-  .catch((err) => console.log(err.message));
+  .then(() => {
+    console.log('Succefuly connected to db');
+  })
+  .catch((err) => {
+    console.log('err :>> ', err);
+  });
 
 app.use('/api/v1', api);
+app.use(isAuthenticated);
 
-app.get('/', (req, res) => {
-  console.log('Reqeust received');
-  res.json({ message: 'Server is running' });
-});
-
-export default app;
+module.exports = app;

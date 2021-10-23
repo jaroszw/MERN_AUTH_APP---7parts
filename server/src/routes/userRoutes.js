@@ -1,7 +1,11 @@
-import express from 'express';
-import userController from '../controllers/userControler.js';
+const express = require('express');
+const userController = require('../controllers/userControler');
+const { isAuthenticated } = require('../middlewares');
 
-const router = express.Router();
-router.post('/signup', userController.signup);
+const user = express.Router();
 
-export default router;
+user.post('/signup', userController.signup);
+user.post('/login', userController.login);
+user.get('/dash', isAuthenticated, userController.findByID);
+
+module.exports = user;
