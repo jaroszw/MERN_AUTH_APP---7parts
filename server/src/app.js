@@ -6,13 +6,13 @@ const cors = require('cors');
 const mongoose = require('mongoose');
 const { db } = require('./config/config');
 const api = require('./routes');
-const { isAuthenticated } = require('./middlewares');
+// const { isAuthenticated } = require('./middlewares');
 const app = express();
 const User = require('./models/User');
 
 // TODO: adding whitelist
 app.use(cors());
-require('./services/passport');
+// require('./services/passport');
 
 app.use(morgan('dev'));
 app.use(express.urlencoded({ extended: true }));
@@ -32,6 +32,6 @@ mongoose
   });
 
 app.use('/api/v1', api);
-app.use(isAuthenticated);
+// app.use(isAuthenticated);
 
 module.exports = app;
