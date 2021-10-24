@@ -38,6 +38,7 @@ module.exports = {
   login: async (req, res) => {
     try {
       const { username, password } = req.body;
+
       const user = await User.findOne({ username });
 
       if (!user) {
@@ -45,9 +46,7 @@ module.exports = {
           .status(403)
           .send({ error: 'the login information is wrong' });
       }
-
       const isPasswordValid = await user.verfiyPassword(password);
-
       if (!isPasswordValid) {
         return res
           .status(403)
