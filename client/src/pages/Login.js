@@ -3,8 +3,6 @@ import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
 import Link from '@mui/material/Link';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
@@ -12,6 +10,7 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import Alert from '@mui/material/Alert';
 
 import { MainContext } from '../context/MainContext';
 import AuthServices from '../services/auth.service';
@@ -39,9 +38,10 @@ const theme = createTheme();
 const Login = () => {
   const { setJwt, jwt } = useContext(MainContext);
   const history = useHistory();
+  const [error, setError] = useState('');
   const [user, setUser] = useState({
-    username: 'wjarosz',
-    password: 'zaST750',
+    username: 'w@wp.pl',
+    password: 'zzZZ000',
   });
 
   const handleChange = (e) => {
@@ -57,7 +57,10 @@ const Login = () => {
       setJwt(token);
       localStorage.setItem('token', token);
     } catch (error) {
-      console.log(`error.response.data.error`, error.response.data.error);
+      setError(error?.response?.data?.error);
+      setTimeout(() => {
+        setError('');
+      }, 3000);
     }
   };
 
@@ -115,10 +118,8 @@ const Login = () => {
               autoComplete="current-password"
               onChange={(e) => handleChange(e)}
             />
-            <FormControlLabel
-              control={<Checkbox value="remember" color="primary" />}
-              label="Remember me"
-            />
+            {error && <Alert severity="error">{error}</Alert>}
+
             <Button
               type="submit"
               fullWidth

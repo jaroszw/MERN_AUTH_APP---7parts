@@ -30,7 +30,10 @@ module.exports = {
       });
     } catch (error) {
       if (Object.keys(error.keyValue[0] === 'username')) {
-        return res.status(400).send({ error: 'This username already exist' });
+        return res.status(400).send({
+          error:
+            'This username already exist - SignIn or try with other credentials',
+        });
       }
       return res.status(400).send({ error: 'something is wrong' });
     }

@@ -29,7 +29,6 @@ module.exports = {
         new RegExp('^[a-zA-Z0-9]{6,12}$')
       ),
     });
-    console.log(req.body);
     const { error } = schema.validate(req.body);
 
     if (error) {

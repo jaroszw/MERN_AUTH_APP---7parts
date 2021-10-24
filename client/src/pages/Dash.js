@@ -7,6 +7,7 @@ import Container from '@mui/material/Container';
 
 const Dash = () => {
   const { jwt, setJwt } = useContext(MainContext);
+  const [parsedData, setParsedData] = useState('');
   const history = useHistory();
 
   const logout = () => {
@@ -15,19 +16,19 @@ const Dash = () => {
     return history.push('/login');
   };
 
-  const data = JSON.parse(atob(jwt.split('.')[1]));
-  // <pre>{JSON.stringify(JSON.parse(atob(jwt.split('.')[1])), null, 2)}</pre>
+  useEffect(() => {
+    try {
+      return setParsedData(atob(jwt.split('.')[1]));
+    } catch (error) {
+      AuthServices.logout();
+      setJwt('');
+      return history.push('/');
+    }
+  }, [jwt, history, setJwt, setParsedData]);
 
   return (
     <Container component="main" maxWidth="xs">
-      <h1>Dash Page</h1>
-      <p>ID: {data._id}</p>
-      <p>USER NAME: {data.username}</p>
-      <p>USER PASSWORD: {data.password}</p>
-      <p>CREATED AT: {data.createdAt}</p>
-      <p>UPDATED AT: {data.updatedAt}</p>
-      <p>IAT: {data.iat}</p>
-      <p>EXP: {data.exp}</p>
+      <p>{parsedData}</p>
       <Button
         onClick={logout}
         color="secondary"
